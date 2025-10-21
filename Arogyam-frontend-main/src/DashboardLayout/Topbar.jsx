@@ -1,7 +1,7 @@
 import { Search, Bell, User, ChevronDown } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
-function TopBar() {
+function TopBar({ isExpanded = true }) {
   const [notifications] = useState(3);
   const [searchFocused, setSearchFocused] = useState(false);
   const [userName, setUserName] = useState("John Doe");
@@ -46,7 +46,7 @@ function TopBar() {
   }, []);
 
   return (
-    <header className="bg-white border-b border-gray-200 h-20 fixed top-0 right-0 left-64 z-30 px-8 flex items-center justify-between">
+    <header className={`bg-white border-b border-gray-200 h-20 fixed top-0 right-0 z-30 px-8 flex items-center justify-between transition-all duration-300 ${isExpanded ? 'left-64' : 'left-20'}`}>
       <div className="flex items-center gap-6 flex-1">
         <div className="relative flex-1 max-w-xl">
           <Search className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors duration-200 ${
