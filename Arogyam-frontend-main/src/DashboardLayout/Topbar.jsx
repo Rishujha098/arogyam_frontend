@@ -1,9 +1,49 @@
 import { Search, Bell, User, ChevronDown } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function TopBar() {
   const [notifications] = useState(3);
   const [searchFocused, setSearchFocused] = useState(false);
+  const [userName, setUserName] = useState("John Doe");
+
+  // Load user name from localStorage and listen for changes
+  useEffect(() => {
+    const loadUserName = () => {
+      try {
+        const raw = localStorage.getItem("arogyam_profile");
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          setUserName(parsed.name || "John Doe");
+        }
+      } catch (_) {
+        // If parsing fails, keep default
+      }
+    };
+
+    // Load initially
+    loadUserName();
+
+    // Listen for storage changes (when profile is updated)
+    const handleStorageChange = (e) => {
+      if (e.key === "arogyam_profile") {
+        loadUserName();
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Also listen for custom events (for same-tab updates)
+    const handleProfileUpdate = () => {
+      loadUserName();
+    };
+
+    window.addEventListener('profileUpdated', handleProfileUpdate);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('profileUpdated', handleProfileUpdate);
+    };
+  }, []);
 
   return (
     <header className="bg-white border-b border-gray-200 h-20 fixed top-0 right-0 left-64 z-30 px-8 flex items-center justify-between">
@@ -43,7 +83,7 @@ function TopBar() {
             <User className="w-5 h-5" />
           </div>
           <div className="text-left">
-            <p className="text-sm font-semibold text-gray-800">John Doe</p>
+            <p className="text-sm font-semibold text-gray-800">{userName}</p>
             <p className="text-xs text-gray-500">Free</p>
           </div>
           {/* <ChevronDown className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors duration-200" /> */}
