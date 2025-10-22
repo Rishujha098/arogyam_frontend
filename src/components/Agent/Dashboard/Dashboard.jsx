@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Sparkles, TrendingUp, TrendingDown, Minus,Filter, FileText, Calendar, Activity,Download, Plus , Award, Microscope, Pill, Scan, ClipboardList, Syringe, User, Building2  } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -138,6 +138,36 @@ export default Dashboard
 
 function WelcomeSection() {
      const navigate = useNavigate();
+  const [userName, setUserName] = useState('Karan');
+
+  useEffect(() => {
+    const loadUserName = () => {
+      try {
+        const raw = localStorage.getItem('arogyam_profile');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          setUserName(parsed.name || 'User');
+        } else {
+          setUserName('User');
+        }
+      } catch (_) {
+        // keep default
+      }
+    };
+
+    loadUserName();
+    const handleStorage = (e) => {
+      if (e.key === 'arogyam_profile') loadUserName();
+    };
+    const handleProfileUpdated = () => loadUserName();
+
+    window.addEventListener('storage', handleStorage);
+    window.addEventListener('profileUpdated', handleProfileUpdated);
+    return () => {
+      window.removeEventListener('storage', handleStorage);
+      window.removeEventListener('profileUpdated', handleProfileUpdated);
+    };
+  }, []);
   const currentHour = new Date().getHours();
   const greeting = currentHour < 12 ? 'Good Morning' : currentHour < 18 ? 'Good Afternoon' : 'Good Evening';
 
@@ -154,7 +184,7 @@ function WelcomeSection() {
           </span>
         </div>
 
-        <h1 className="text-4xl font-bold mb-2">Welcome back, Riya! 👋</h1>
+  <h1 className="text-4xl font-bold mb-2">Welcome back, {userName}! 👋</h1>
         <p className="text-blue-100 text-lg mb-6">
           Your health journey is looking great. Here's your overview for today.
         </p>
