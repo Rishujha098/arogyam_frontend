@@ -67,7 +67,7 @@ const initialRecordsData = [
     type: "MRI Scan", 
     date: "2025-07-28", 
     status: "Completed",
-    doctor: "Dr. Robert Wilson",
+    doctor: "Dr. karan ",
     category: "Radiology",
     fileSize: "12.5 MB",
     description: "Brain MRI - Neurological Assessment",
