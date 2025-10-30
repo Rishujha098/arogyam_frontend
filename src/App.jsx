@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './components/Home/Home.jsx';
+import Login from './components/Auth/Login.jsx';
 import Chatbot from './components/Agent/Chatbot/Chatbot.jsx';
 import { DashboardLayout } from './DashboardLayout/Layout.jsx';
 import Dashboard from './components/Agent/Dashboard/Dashboard.jsx';
@@ -15,7 +16,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Home />} />
-    {/* hello */}
+        <Route path='/login' element={<Login />} />
+        
 
         <Route path='/dashboard' element={<DashboardLayout />} > 
           <Route path='d' element={<Dashboard />} />
